@@ -53,11 +53,7 @@ def findDayofWeek():
     dayOfWeek = datetime.datetime.strptime(date, '%d %m %Y').weekday()
     return (calendar.day_name[dayOfWeek])
 
-dayOfWeek = findDayofWeek()
-
-alarmSchedual = Schedual[dayOfWeek]
-
-def checkTimes():
+def checkTimes(alarmSchedual):
 
     for onTime in alarmSchedual["on"]:
         [hour, min] = onTime.split(":")
@@ -73,4 +69,7 @@ def checkTimes():
             break
 
 def main():
-    
+    while True:
+        checkTimes(Schedual[findDayofWeek()])
+        time.sleep(60)
+main()
