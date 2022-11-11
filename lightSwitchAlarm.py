@@ -3,10 +3,16 @@ import calendar
 import time
 import serial
 
+# implement in Prod
 #Serial = serial.Serial(port="/dev/ttyUSB0", baudrate=9600, timeout=10)
 
 def send(data):
-    #Serial.write(bytes(data, 'utf-8'))
+    #just incase of Arduino not being conected
+    try:
+        Serial = serial.Serial(port="/dev/ttyUSB0", baudrate=9600, timeout=10)
+        Serial.write(bytes(data, 'utf-8'))
+    except:
+        print(f"Serial Failed \n {data} not sent")
     time.sleep(0.05)
 
 Schedual = {
@@ -51,11 +57,20 @@ dayOfWeek = findDayofWeek()
 
 alarmSchedual = Schedual[dayOfWeek]
 
-onTimes = alarmSchedual["on"]
-off = alarmSchedual["off"]
+def checkTimes():
 
-for onTime in onTimes:
-    [hour, min] = onTime.split(":")
-    print(current_time.minute)
-    if hour == current_time.hour:
-        pass
+    for onTime in alarmSchedual["on"]:
+        [hour, min] = onTime.split(":")
+        print(current_time.minute)
+        if int(hour) == current_time.hour and int(min) == current_time.minute:
+            send("2")
+            break
+    for offTime in alarmSchedual["off"]:
+        [hour, min] = offTime.split(":")
+        print(current_time.minute)
+        if int(hour) == current_time.hour and int(min) == current_time.minute:
+            send("1")
+            break
+
+def main():
+    
