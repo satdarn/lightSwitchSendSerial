@@ -2,6 +2,7 @@ import datetime
 import calendar
 import time
 import serial
+import json
 
 # implement in Prod
 #Serial = serial.Serial(port="/dev/ttyUSB0", baudrate=9600, timeout=10)
@@ -16,10 +17,13 @@ def send(data):
     time.sleep(0.05)
 
 def getSchedualFromJson():
-    #read the func name dibshit, its self expanitory
-    with open() as jsonFile:
-        pass
-    return 
+    # ITS SELF EXPLAINATORY DIBSHIT
+    with open('Schedual.json', 'r') as openfile:
+        Schedual = json.load(openfile)
+ 
+    print(Schedual)
+    print(type(Schedual))
+    return Schedual
 
 
 current_time = datetime.datetime.now()
@@ -47,8 +51,8 @@ def checkTimes(alarmSchedual):
     
 
 def main():
+    Schedual = getSchedualFromJson()
     while True:
-        
         checkTimes(Schedual[findDayofWeek()])
         time.sleep(60)
 main()
