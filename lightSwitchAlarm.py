@@ -3,7 +3,7 @@ import calendar
 import time
 import serial
 import json
-
+import os
 # implement in Prod
 #Serial = serial.Serial(port="/dev/ttyUSB0", baudrate=9600, timeout=10)
 
@@ -16,11 +16,22 @@ def send(data):
         print(f"Serial Failed \n {data} not sent")
     time.sleep(0.05)
 
-def getSchedualFromJson():
+def getCurrentJson():
+    #gets the Schedual.json from github.com
+    cwd = os.getcwd()
+    print(cwd)
+    for entry in os.listdir(cwd):
+        if entry == "Schedual.json":
+            os.system("rm Schedual.json")
+    os.system("git clone https://github.com/satdarn/lightSwitchSendSerial.git")
+    os.system(f"mv {cwd}/lightSwitchSendSerial/Schedual.json {cwd}")
+    os.system(f"rm lightSwitchSendSerial -d -r -f")
+
+def getSchedualFromJson(jsonfile):
     # ITS SELF EXPLAINATORY DIBSHIT
-    with open('Schedual.json', 'r') as openfile:
+    with open(jsonfile, 'r') as openfile:
         Schedual = json.load(openfile)
- 
+
     print(Schedual)
     print(type(Schedual))
     return Schedual
@@ -51,7 +62,8 @@ def checkTimes(alarmSchedual):
     
 
 def main():
-    Schedual = getSchedualFromJson()
+    getCurrentJson()
+    Schedual = getSchedualFromJson("Schedual.json")
     while True:
         checkTimes(Schedual[findDayofWeek()])
         time.sleep(60)
